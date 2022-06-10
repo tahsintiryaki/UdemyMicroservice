@@ -21,6 +21,7 @@ namespace FreeCourse.Services.Catalog.Controllers
         {
             _categoryService = categoryService;
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -43,12 +44,7 @@ namespace FreeCourse.Services.Catalog.Controllers
             return CreateActionResultInstance(categories);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById2(string id)
-        {
-            var categories = await _categoryService.GetByIdAsync(id);
-            return CreateActionResultInstance(categories);
-        }
+      
 
     }
 }
