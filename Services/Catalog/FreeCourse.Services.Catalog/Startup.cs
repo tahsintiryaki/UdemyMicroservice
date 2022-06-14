@@ -1,8 +1,10 @@
 using FreeCourse.Services.Catalog.Services;
 using FreeCourse.Services.Catalog.Settings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,11 +31,28 @@ namespace FreeCourse.Services.Catalog
         public void ConfigureServices(IServiceCollection services)
         {
 
+            //Bu tanýmlama ile microservis JWT Token ile koruma altýna alýndý!
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+
+                options.Authority = Configuration["IdentityServerURL"];
+                options.Audience = "resource_catalog"; //IdentityServer microservisi içerisinde catalog microservisi için yazan config içerisindeki deðerle ayný olmalý.
+                options.RequireHttpsMetadata = false;
+            });
+
+
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICourseService, CourseService>();
 
             services.AddAutoMapper(typeof(Startup));//Burasý Startup'ýn baðlý olduðu projeyi tarayarak içersinden mapleme iþleminin yapýldýðý class'ý bulur ve mapleme iþlemini o class'a göre yapar.
-            services.AddControllers();
+
+            //services.AddControllers();
+
+            services.AddControllers(opt =>
+            {
+                //Tüm kontrollerlarýn baþýna authorize attribute'ü ekler. Senin gidip tek tek yazmana gerek kalmaz!
+                opt.Filters.Add(new AuthorizeFilter());
+            });
 
 
             //Start
@@ -46,7 +65,7 @@ namespace FreeCourse.Services.Catalog
             });
             //End
 
-
+          
 
 
             services.AddSwaggerGen(c =>
@@ -66,7 +85,7 @@ namespace FreeCourse.Services.Catalog
             }
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
