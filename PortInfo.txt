@@ -1,2 +1,4 @@
+Identity Server => 5001
 Services
 	-CatalogPort => 5011
+	-PhotoStock => 5012
