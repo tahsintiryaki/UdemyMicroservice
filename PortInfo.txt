@@ -1,4 +1,6 @@
 Identity Server => 5001
 Services
-	-CatalogPort => 5011
-	-PhotoStock => 5012
+	-Catalog  => 5011
+	-PhotoStock  => 5012
+	-Basket  => 5013
+	-Discount => 5014 
