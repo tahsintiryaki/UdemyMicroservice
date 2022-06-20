@@ -11,12 +11,12 @@ namespace FreeCourse.Services.Order.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : CustomBaseController
+    public class OrdersController : CustomBaseController
     {
         private readonly IMediator _mediator;
         private readonly ISharedIdentityService _sharedIdentityService;
 
-        public OrderController(IMediator mediator, ISharedIdentityService sharedIdentityService)
+        public OrdersController(IMediator mediator, ISharedIdentityService sharedIdentityService)
         {
             _mediator = mediator;
             _sharedIdentityService = sharedIdentityService;
